@@ -1,20 +1,16 @@
 from policy import Policy
 import numpy as np
-import random
 
 class ValueIterationPolicy(Policy):
     def __init__(self, maze):
         super().__init__(maze)
         self.values = None
-        self.policy = self._value_iteration(maze.start_coordinates)
+        self.policy = self._value_iteration()
 
     def select_action(self, current_state):
-        #@TODO:
-        #Pick best possible mov
-        pass
-        
+        return self.p[current_state[0]][current_state[1]]
 
-    def _value_iteration(self, start_state:list):
+    def _value_iteration(self):
         delta = 1
         threshold = 0.01
         gamma = 0.9
@@ -34,10 +30,47 @@ class ValueIterationPolicy(Policy):
                     new_values[x, y] = max(temp)
                     
             old_values = new_values
-            print(old_values)
-            
-        print(new_values)
-                    
+        self.p = self.policy(old_values)
+
+    def policy(self, values):
+        gamma = 0.9
+        policy = np.empty((4, 4), dtype=object)
+        for y, row in enumerate(values):
+            for x, _ in enumerate(row):
+                if [y,x] in self.maze.terminal_states:
+                    policy[y, x] = 0
+                    continue
+                temp = []
+                temp2 = []
+                for state in self.get_possible_moves(y, x):
+                    reward = self.maze.maze[state[0]][state[1]]
+                    temp.append(reward + gamma * values[state[0]][state[1]])
+                    temp2.append(state)
+                policy[y, x] = temp2[np.argmax(temp)]
+        print(policy)
+        return self.policy_to_directions(policy)
+    
+
+    def policy_to_directions(self, policy):
+        directions = np.empty(policy.shape, dtype=object)
+        for y, row in enumerate(policy):
+            for x, move in enumerate(row):
+                if move is 0:
+                    directions[y, x] = None
+                else:
+                    dy, dx = move[0] - y, move[1] - x
+                    if dy == -1:
+                        directions[y, x] = 'up'
+                    elif dy == 1:
+                        directions[y, x] = 'down'
+                    elif dx == -1:
+                        directions[y, x] = 'left'
+                    elif dx == 1:
+                        directions[y, x] = 'right'
+        print(directions)
+        return directions
+    
+
     def get_possible_moves(self, y, x):
         moves = []
         if y > 0:

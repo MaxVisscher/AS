@@ -53,12 +53,9 @@ def display(Agent, maze, border_width = 5, window_size = (1000,1000)):
         if finished:
             pygame.time.wait(5000)
             Agent.current_state = [3,2]  
-            # running = False     
+            running = False     
         else:
             Agent.act()
-            
-            print(Agent.policy.values)
-            break
             pygame.time.wait(500)  
             if Agent.current_state in maze.terminal_states:
                 print("You have reached the goal!")

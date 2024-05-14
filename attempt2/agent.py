@@ -10,13 +10,11 @@ class Agent:
     def value(self, state):
         self.reward += self.maze.maze[state[0], state[1]]
 
-        
+
     def act(self):
         self.current_state = self.maze.step(
             self.current_state, 
             self.policy.select_action(self.current_state)
         )
-        self.reward += self.maze.maze[
-            self.current_state[0]][self.current_state[1]
-        ]
+        print(self.current_state)
         self.value(self.current_state)
