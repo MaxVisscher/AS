@@ -8,7 +8,7 @@ class Maze:
                             [-1, -1, -1, -1],
                             [10, -2, -1, -1]
                         ])
-        self.start_coordinates = [3,3]
+        self.start_coordinates = [3,2]
         self.terminal_states = [[0,3], [3,0]]
         self.agent_pos = self.start_coordinates
 

@@ -16,5 +16,4 @@ class Agent:
             self.current_state, 
             self.policy.select_action(self.current_state)
         )
-        print(self.current_state)
         self.value(self.current_state)

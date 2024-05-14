@@ -47,7 +47,6 @@ class ValueIterationPolicy(Policy):
                     temp.append(reward + gamma * values[state[0]][state[1]])
                     temp2.append(state)
                 policy[y, x] = temp2[np.argmax(temp)]
-        print(policy)
         return self.policy_to_directions(policy)
     
 
@@ -67,7 +66,6 @@ class ValueIterationPolicy(Policy):
                         directions[y, x] = 'left'
                     elif dx == 1:
                         directions[y, x] = 'right'
-        print(directions)
         return directions
     
 
