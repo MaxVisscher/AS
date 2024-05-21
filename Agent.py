@@ -1,5 +1,13 @@
+from maze import Maze
+from policy import Policy
+
 class Agent:
-    def __init__(self, maze, policy, start_coordinates):
+    def __init__(
+            self, 
+            maze : Maze, 
+            policy: Policy, 
+            start_coordinates
+        ):
         self.maze = maze
         self.policy = policy
         self.current_state = start_coordinates
@@ -12,8 +20,9 @@ class Agent:
 
 
     def act(self):
-        self.current_state = self.maze.step(
-            self.current_state, 
-            self.policy.select_action(self.current_state)
+        self.maze.step(
+            self.maze.agent_pos, 
+            self.policy.select_action(self.maze.agent_pos)
         )
-        self.value(self.current_state)
+            
+        self.value(self.maze.agent_pos)

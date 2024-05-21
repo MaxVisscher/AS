@@ -3,20 +3,30 @@ from maze import Maze
 from agent import Agent
 from randomPolicy import RandomPolicy
 from ValueIterationPolicy import ValueIterationPolicy
+CONTINUE = True
 
-
-def display(Agent, maze, border_width = 5, window_size = (1000,1000)):
+def display(Agent : Agent, maze: Maze, border_width = 5, window_size = (1000,1000)):
+    global CONTINUE
     cell_size = (window_size[1] // len(maze.maze[0]), window_size[1]// len(maze.maze))
     pygame.init()
-  
+
     screen = pygame.display.set_mode((1000, 1000))
-    colors = { -1: (255, 255, 255), -2: (0, 0, 255), -10: (255, 0, 0), 10: (0, 255, 0), 40: (0, 255, 255) }
-    agent_color = (0, 0, 0)  
-    agent_radius = 20 
+    colors = { 
+        -1: (255, 255, 255), 
+        -2: (0, 0, 255),
+        -10: (255, 0, 0), 
+        10: (0, 255, 0), 
+        40: (0, 255, 255) } 
     running = True
     finished = False
-
+    agent_image = pygame.image.load('untitled.png')
+    font = pygame.font.Font(None, 24)  # Font for rendering text
+    terminal_image = pygame.image.load('untitled3.png')
     while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                CONTINUE = False
         #Display the maze
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -33,14 +43,32 @@ def display(Agent, maze, border_width = 5, window_size = (1000,1000)):
                         cell_size[1] - border_width
                     )
                 )
+
+                # Display the policy values and directions
+                value = Agent.policy.values[i][j]
+                direction = Agent.policy.p[i][j]
+                font = pygame.font.SysFont(None, 50)
+                value_text = font.render("{:.2f}".format(value), True, (0, 0, 0))
+                direction_text = font.render(str(direction), True, (0, 0, 0))
+
+                screen.blit(value_text, (j * cell_size[0] + 5, i * cell_size[1] + 5))
+                screen.blit(direction_text, (j * cell_size[0] + 5, i * cell_size[1] + 30))
+
         #Display the agent
-        pygame.draw.circle(
-            screen, 
-            agent_color, 
+        screen.blit(
+            agent_image, 
             (
-                Agent.current_state[1] * cell_size[0] + cell_size[0] // 2, 
-                Agent.current_state[0] * cell_size[1] + cell_size[1] // 2), 
-                agent_radius
+                maze.agent_pos[1] * cell_size[0] + cell_size[0] // 2 - agent_image.get_width() // 2, 
+                maze.agent_pos[0] * cell_size[1] + cell_size[1] // 2 - agent_image.get_height() // 2
+            )
+        )
+        if maze.agent_pos not in maze.terminal_states:
+           screen.blit(
+                terminal_image, 
+                (
+                    3 * cell_size[0] + cell_size[0] // 2 - agent_image.get_width() // 2, 
+                    0 * cell_size[1] + cell_size[1] // 2 - agent_image.get_height() // 2
+                )
             )
         #Display the score
         font = pygame.font.SysFont(None, 500)
@@ -57,19 +85,21 @@ def display(Agent, maze, border_width = 5, window_size = (1000,1000)):
         else:
             Agent.act()
             pygame.time.wait(500)  
-            if Agent.current_state in maze.terminal_states:
+            if maze.agent_pos in maze.terminal_states:
+                agent_image = pygame.image.load('untitled2.png')
                 print("You have reached the goal!")
                 finished = True
                 
+                
             
-    pygame.quit()
-
 def main():
-    maze = Maze()
-    # Policy = RandomPolicy()
-    Policy = ValueIterationPolicy(maze)
-    Bozo = Agent(maze, Policy, maze.start_coordinates)
-    display(Bozo, maze)
+    while CONTINUE:
+        maze = Maze()
+        # Policy = RandomPolicy()
+        Policy = ValueIterationPolicy(maze, gamma = 0.9)
+        Bozo = Agent(maze, Policy, maze.start_coordinates)
+        display(Bozo, maze)
+    pygame.quit()
 
 if __name__ == "__main__":
     main()

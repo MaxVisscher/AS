@@ -26,4 +26,5 @@ class Maze:
         elif action == "right":
             if state[1] < len(self.maze[0]) - 1:
                 copy_state[1] += 1
-        return copy_state 
+        self.agent_pos = copy_state
+        
