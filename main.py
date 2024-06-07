@@ -101,16 +101,17 @@ def main():
     # Policy = RandomPolicy()
     Temp = ValueIterationPolicy(maze, gamma = 1)
     Optimal = Temp.p
-    # td = TemporalDiff(Optimal, 1000, 1,maze, maze.start_coordinates)
-    # td.temporal_difference(100000, Optimal, maze.start_coordinates, 0.1)
-    Sar = Sarsa(maze, Temp, maze.start_coordinates)
-    Bozo = Agent(maze, Temp, maze.start_coordinates)
-    Sar.sarsa_max(350000, 0.1, 0.9, 0.1, maze.start_coordinates)
+    td = TemporalDiff(Optimal, 1000, 0.5 ,maze, maze.start_coordinates)
+    print(td.maze.maze)
+    td.temporal_difference(100000, Optimal, maze.start_coordinates, 0.1)
+    # Sar = Sarsa(maze, Temp, maze.start_coordinates)
+    # Bozo = Agent(maze, Temp, maze.start_coordinates)
+    # Sar.sarsa(1000000, 0.1, 0.9, 0.1, maze.start_coordinates)
     # print(Optimal)
     # Policy.temporal_difference()
     # print(Policy.policy)
     # display(Bozo, maze)
-    pygame.quit()
+    # pygame.quit()
 
 if __name__ == "__main__":
     main()

@@ -45,7 +45,7 @@ class TemporalDiff(Agent):
         values = np.zeros((4, 4))
         for _ in range(episodes):
             state = start
-            while state not in self.maze.terminal_states:
+            while list(state) not in self.maze.terminal_states:
                 x, y = state
                 action = policy[x][y]
                 next_state = self.maze.step(state, action)
