@@ -3,10 +3,14 @@ from maze import Maze
 from agent import Agent
 from randomPolicy import RandomPolicy
 from ValueIterationPolicy import ValueIterationPolicy
+from temporal import TemporalDiff
+from SARSA import Sarsa
+
 CONTINUE = True
 
 def display(Agent : Agent, maze: Maze, border_width = 5, window_size = (1000,1000)):
     global CONTINUE
+
     cell_size = (window_size[1] // len(maze.maze[0]), window_size[1]// len(maze.maze))
     pygame.init()
 
@@ -74,7 +78,7 @@ def display(Agent : Agent, maze: Maze, border_width = 5, window_size = (1000,100
         font = pygame.font.SysFont(None, 500)
         text_surf = font.render(str(Agent.reward), True, (0, 0, 0))
         text_surf.set_alpha(127)
-        screen.blit(text_surf, (50, 325))
+        # screen.blit(text_surf, (50, 325))
 
         pygame.display.flip()
        
@@ -90,15 +94,22 @@ def display(Agent : Agent, maze: Maze, border_width = 5, window_size = (1000,100
                 print("You have reached the goal!")
                 finished = True
                 
-                
-            
+
 def main():
-    while CONTINUE:
-        maze = Maze()
-        # Policy = RandomPolicy()
-        Policy = ValueIterationPolicy(maze, gamma = 0.9)
-        Bozo = Agent(maze, Policy, maze.start_coordinates)
-        display(Bozo, maze)
+    # while CONTINUE:
+    maze = Maze()
+    # Policy = RandomPolicy()
+    Temp = ValueIterationPolicy(maze, gamma = 1)
+    Optimal = Temp.p
+    # td = TemporalDiff(Optimal, 1000, 1,maze, maze.start_coordinates)
+    # td.temporal_difference(100000, Optimal, maze.start_coordinates, 0.1)
+    Sar = Sarsa(maze, Temp, maze.start_coordinates)
+    Bozo = Agent(maze, Temp, maze.start_coordinates)
+    Sar.sarsa(350000, 0.1, 1, 0.1, maze.start_coordinates)
+    # print(Optimal)
+    # Policy.temporal_difference()
+    # print(Policy.policy)
+    # display(Bozo, maze)
     pygame.quit()
 
 if __name__ == "__main__":
