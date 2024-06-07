@@ -17,7 +17,7 @@ class Sarsa(Agent):
         ):
         Qfunction = {}
 
-        for epoch in range(epochs):
+        for _ in range(epochs):
             state = tuple(start_coordinates)
             if state not in list(Qfunction.keys()):
                 Qfunction[state] = {
@@ -38,10 +38,9 @@ class Sarsa(Agent):
                     ]
                 )
             while list(state) not in self.maze.terminal_states:
-                
                 next_state = self.maze.step(state, action)
-
                 reward = self.maze.maze[next_state[0]][next_state[1]]
+                
                 if next_state not in list(Qfunction.keys()):
                     Qfunction[next_state] = {
                         "up": 0, 
@@ -73,8 +72,7 @@ class Sarsa(Agent):
                 )
                 state = next_state
                 action = next_action
-                # if list(state) in self.maze.terminal_states:
-                #     print(epoch)
+
         self.display_q_function(Qfunction)  
     
     def sarsa_max(
@@ -87,7 +85,7 @@ class Sarsa(Agent):
         ):
         Qfunction = {}
 
-        for epoch in range(epochs):
+        for _ in range(epochs):
             state = tuple(start_coordinates)
             if state not in list(Qfunction.keys()):
                 Qfunction[state] = {
@@ -133,8 +131,6 @@ class Sarsa(Agent):
                     )
                 )
                 state = next_state
-                # if list(state) in self.maze.terminal_states:
-                #     print(epoch)
         self.display_q_function(Qfunction)    
         
             
