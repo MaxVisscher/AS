@@ -13,7 +13,8 @@ class Maze:
         self.agent_pos = self.start_coordinates
 
     def step(self, state, action):
-        copy_state = state.copy()
+
+        copy_state = list(state)
         if action == "up":
             if state[0] > 0:
                 copy_state[0] -= 1
@@ -27,4 +28,5 @@ class Maze:
             if state[1] < len(self.maze[0]) - 1:
                 copy_state[1] += 1
         self.agent_pos = copy_state
-        
+        return tuple(copy_state)
+    

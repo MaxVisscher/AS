@@ -1,12 +1,12 @@
 from policy import Policy
 import numpy as np
-
+from maze import Maze
 class ValueIterationPolicy(Policy):
     def __init__(self, maze, gamma):
         super().__init__(maze)
         self.gamma = gamma
         self.values = None
-        self.policy = self._value_iteration()
+        self._value_iteration()
     
     def select_action(self, current_state):
         return self.p[current_state[0]][current_state[1]]

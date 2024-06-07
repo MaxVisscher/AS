@@ -105,7 +105,7 @@ def main():
     # td.temporal_difference(100000, Optimal, maze.start_coordinates, 0.1)
     Sar = Sarsa(maze, Temp, maze.start_coordinates)
     Bozo = Agent(maze, Temp, maze.start_coordinates)
-    Sar.sarsa(350000, 0.1, 1, 0.1, maze.start_coordinates)
+    Sar.sarsa_max(350000, 0.1, 0.9, 0.1, maze.start_coordinates)
     # print(Optimal)
     # Policy.temporal_difference()
     # print(Policy.policy)
